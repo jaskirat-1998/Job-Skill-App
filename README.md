@@ -1,4 +1,4 @@
-# Job-Skill_App
+# Job-Skill-App
 A simple Flask app to find the appropriate job for your skills and vice-versa
 
 # Features
