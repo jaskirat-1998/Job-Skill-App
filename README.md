@@ -9,5 +9,6 @@ A simple Flask app to find the appropriate job for your skills and vice-versa
 <img width="1435" alt="image" src="https://github.com/jaskirat-1998/Job-Skill-App/assets/90675615/9754ba4d-a58d-4553-954c-0883f14d9720">
 
 - Search relevant job titles for entered skills.
-![Uploading image.png…]()
+<img width="1435" alt="image" src="https://github.com/jaskirat-1998/Job-Skill-App/assets/90675615/4f640836-518e-4a51-8bb7-358fd96862e6">
+
 
