@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LinkedIn Posting Markup</title>
+    <script src="{{ url_for('static', filename='jquery-3.6.4.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</head>
+<body>
+    <header>
+        <h1>LinkedIn Posting Markup</h1>
+        <nav>
+            <a href="/">Home</a>
+            <!-- <a href="#">About<i class="fa fa-angle-down"></i></a>
+            <a href="#">Contact<i class="fa fa-angle-down"></i></a> -->
+        </nav>
+    </header>
+    <div class="container">
+        <div class="box">
+          <h2>Select job title from the drop down box</h2>
+      
+            <label for="category">Choose a title</label>
+            <select id="category" name="category">
+              <option value="software_engineer">Software Engineer</option>
+              <option value="machine_learning_engineer">Machine Learning Engineer</option>
+              <option value="cloud_engineer">Cloud Engineer</option>
+              <option value="nlp_engineer">NLP Engineer</option>
+              <option value="data_science">Data Scientist</option>
+              <option value="full_stack_engineer">Full Stack Engineer</option>
+              <option value="database_developer">Database Developer</option>
+              <option value="cybersecurity">Cybersecurity Engineer</option>
+            </select>
+            
+
+        </div>
+        <div>
+          <figure class="highcharts-figure">
+              <div id="container"></div>
+          </figure>
+        </div>
+      </div>
+      <script>
+
+var bar_chart = {
+    chart: {
+        type: 'bar'
+    },
+    title: {
+        text: 'Importance of skills' ,
+        align: 'left'
+    },
+    subtitle: {
+        text: '',
+        align: 'left'
+    },
+    xAxis: {
+        categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
+        title: {
+            text: null
+        }
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: 'Percentage of jobs that require the skill',
+            align: 'high'
+        },
+        labels: {
+            overflow: 'justify'
+        }
+    },
+    tooltip: {
+        valueSuffix: ' %'
+    },
+    plotOptions: {
+        bar: {
+            dataLabels: {
+                enabled: true
+            }
+        }
+    },
+    legend: {
+        layout: 'vertical',
+        align: 'right',
+        verticalAlign: 'top',
+        x: -40,
+        y: 80,
+        floating: true,
+        borderWidth: 1,
+        backgroundColor:
+            Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+        shadow: true
+    },
+    credits: {
+        enabled: false
+    },
+    series: [{
+        name: 'Percentage of jobs that required this skill.',
+        data: [631, 727, 3202, 721, 26]
+    }]
+}
+Highcharts.chart('container', bar_chart);
+
+
+$("#category").change(function(){
+            debugger;
+            var param = {class: $('#category').val()};
+            
+            $.ajax({
+                type: 'POST',
+                url: '/class_skills',
+                
+                data: JSON.stringify(param),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (response) {
+                    debugger
+                    var data = JSON.parse(response);
+                    const ctg = [];
+                    const vals = [];
+                    for (i in data){
+                      ctg.push(i)
+                      vals.push(data[i])
+                    }
+                    bar_chart.series[0].data = vals;
+                    bar_chart.xAxis.categories = ctg;
+                    Highcharts.chart('container', bar_chart);
+                },
+                error: function (e) {
+                    debugger
+                    console.log(e);
+                }
+            });
+
+        });
+  $("#category").change()
+
+      </script>
+</body>
+</html>

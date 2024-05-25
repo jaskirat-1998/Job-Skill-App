@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LinkedIn Posting Markup</title>
+    <script src="{{ url_for('static', filename='jquery-3.6.4.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="https://rawgit.com/vitmalina/w2ui/master/dist/w2ui.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="http://w2ui.com/src/w2ui-1.4.min.css" />
+    <script type="text/javascript" src="http://w2ui.com/src/w2ui-1.4.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>LinkedIn Posting Markup</h1>
+        <nav>
+            <a href="/">Home</a>
+        </nav>
+    </header>
+    <div class="container" style="flex-direction: column; align-items: center; padding-bottom: 5%;">
+            <div class="textbox-container" style="height: 250px; border-bottom: 10px;">
+                <h2>Enter list of skills separated by commas</h2>
+                <textarea id="text" placeholder="Skills"></textarea>
+                <button id="submit" >Get job info</button>
+            </div>
+        <br>
+            <div id="grid" style="width: 700px; height: 400px;"></div>
+            <br>
+            <button id="download" >Download data</button>
+	</div>
+
+
+
+    <script type="module">
+        
+        import { w2grid } from 'https://rawgit.com/vitmalina/w2ui/master/dist/w2ui.es6.min.js'
+
+        let grid = new w2grid({
+            name: 'grid',
+            box: '#grid',
+            columns: [
+                { field: 'url', text: 'LinkedIn URL', size: '200px'},
+                { field: 'title', text: 'Title', size: '100%' },
+                { field: 'job_description', text: 'Job Description', size: '120px',  }, // see w2utils.formatters for more formatters
+                { field: 'seniority_level', text: 'Seniority Level', size: '120px',  style: 'text-align: center' },
+                { field: 'employment_type', text: 'Employment Type', size: '120px',  style: 'text-align: center' }
+            ],
+        })
+
+
+
+        
+        $("#submit").click(function(){
+            debugger;
+            var param = {skills: $('#text').val()};
+            
+            $.ajax({
+                type: 'POST',
+                url: '/job_data',
+                
+                data: JSON.stringify(param),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (response) {
+                    debugger
+                    grid.records = JSON.parse(response);
+                    grid.refresh();
+                    console.log(response);
+                },
+                error: function (e) {
+                    debugger
+                    console.log(e);
+                }
+            });
+
+        });
+
+        $("#download").click(function(){
+            debugger;
+            
+            $.ajax({
+                type: 'POST',
+                url: '/download',
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (response) {
+                    debugger
+                    const data = JSON.parse(response),
+                    fileName = "my-csv.csv";
+
+        saveData(data, fileName);
+                },
+                error: function (e) {
+                    debugger
+                    console.log(e);
+                }
+            });
+
+        });
+
+
+        const saveData = (function () {
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            return function (data, fileName) {
+                const blob = new Blob([data], {type: "octet/stream"}),
+                    url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            };
+        }());
+
+        
+
+
+        
+        </script>
+
+
+</body>
+</html>

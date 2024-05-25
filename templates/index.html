@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>LinkedIn Posting Markup</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<header>
+		<h1>LinkedIn Posting Markup</h1>
+		<nav>
+			<!-- <a href="#">Home</a>
+			<a href="#">About<i class="fa fa-angle-down"></i></a>
+			<a href="#">Contact<i class="fa fa-angle-down"></i></a> -->
+		</nav>
+	</header>
+	<div class="container">
+		<div class="box">
+			<img src="{{ url_for('static', filename='skill.png') }}" alt="Box 1">
+			<h2>Search by skills</h2>
+			<p>Enter the tools you are familiar with and view the job titles that best match your skillset.</p>
+			<a href="/skill"><button>Search</button></a>
+		</div>
+		<div class="box">
+			<img src="{{ url_for('static', filename='job.png') }}" alt="Box 2">
+			<h2>Search by job</h2>
+			<p>Enter the job title and view the tools required in those roles.</p>
+			<a href="/job"><button>Search</button></a>
+		</div>
+		<div class="box">
+			<img src="{{ url_for('static', filename='cloud.png') }}" alt="Box 3">
+			<h2>Word Cloud</h2>
+			<p>Enter skills and view the word cloud of job titles which require the skill.</p>
+			<a href="/wordcloud"><button>Search</button></a>
+		</div>
+	</div>
+</body>
+</html>

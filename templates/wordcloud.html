@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LinkedIn Posting Markup</title>
+    <script src="{{ url_for('static', filename='jquery-3.6.4.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+</head>
+<body>
+    <header>
+        <h1>LinkedIn Posting Markup</h1>
+        <nav>
+            <a href="/">Home</a>
+        </nav>
+    </header>
+    <div class="container" style="flex-direction: column; align-items: center; padding-bottom: 5%;">
+		<div class="textbox-container" style="height: 150px; border-bottom: 10px;">
+			<h4>Enter list of skills separated by commas</h4>
+			<textarea id="text" placeholder="Skills"></textarea>
+			<button id="submit">Get wordcloud</button>
+		</div>
+        <br>
+        <figure class="highcharts-figure">
+            <div id="container"></div>
+           
+        </figure>
+	</div>
+    <script>
+
+
+    data = [
+  {
+    "name": "",
+    "weight": 0
+  }];
+
+w_cloud_data = {
+    accessibility: {
+        screenReaderSection: {
+            beforeChartFormat: '<h5>{chartTitle}</h5>' +
+                '<div>{chartSubtitle}</div>' +
+                '<div>{chartLongdesc}</div>' +
+                '<div>{viewTableButton}</div>'
+        }
+    },
+    series: [{
+        type: 'wordcloud',
+        data: data,
+        name: 'Occurrences'
+    }],
+    credits: {
+        enabled: false
+    },
+    title: {
+        text: 'Wordcloud of job titles based on the skills entered',
+        align: 'left'
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size: 16px"><b>{point.key}</b></span><br>'
+    }
+}
+
+$("#submit").click(function(){
+            debugger;
+            var param = {skills: $('#text').val()};
+            
+            $.ajax({
+                type: 'POST',
+                url: '/wordcloud',
+                
+                data: JSON.stringify(param),
+                contentType: "application/json; charset=utf-8",
+                async: false,
+                success: function (response) {
+                    debugger
+                    w_cloud_data.series[0].data = response;
+                    Highcharts.chart('container', w_cloud_data);
+                },
+                error: function (e) {
+                    debugger
+                    console.log(e);
+                }
+            });
+
+        });
+
+
+
+    </script>
+</body>
+</html>
