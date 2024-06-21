@@ -1,5 +1,6 @@
 # Job-Skill-App
-A simple Flask app to find the appropriate job for your skills and vice-versa
+A simple Flask app to find the appropriate job for your skills and and the required skills for your target app.
+you can try it here: https://job-skill-app.onrender.com
 
 # Features
 - Search relevant job postings for entered skills.
